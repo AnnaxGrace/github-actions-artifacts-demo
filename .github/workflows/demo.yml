@@ -19,7 +19,7 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     outputs:
-       js-party-script-file: ${{ steps.here-party.outputs }}
+       js-party-script-file: ${{ steps.here-party.outputs.js-party-script-file }}
     steps:
       - name: Get code
         uses: actions/checkout@v3
