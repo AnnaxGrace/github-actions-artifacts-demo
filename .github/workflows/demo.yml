@@ -19,7 +19,14 @@ jobs:
       - name: Lint code
         run: npm run lint
       - name: Test code
+        id: run-test
         run: npm run test
+      - name: Upload test report
+        if: failure() && steps.run-test.outcome == 'failure'
+        uses: actions/upload-artifact@v3
+        with: 
+          name: test-report
+          path: test.json
   build:
     needs: test
     runs-on: ubuntu-latest
@@ -61,3 +68,11 @@ jobs:
         run: echo "${{ needs.build.outputs.js-party-script-file }}"
       - name: Deploy
         run: echo "Deploying..."
+
+  report:
+    needs: [test, deploy]
+    if: failure() 
+    runs-on: ubuntu-latest
+    steps: |
+      echo "Something went wrong"
+      echo "${{ toJSON(github) }}"
